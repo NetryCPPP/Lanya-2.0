@@ -37,7 +37,7 @@ module.exports = {
       .addFields(
         {
           name: 'Developer',
-          value: '```elm\nGaurav & Neppixel\n```',
+          value: '```elm\nNetryPVP\n```',
           inline: true,
         },
         {
