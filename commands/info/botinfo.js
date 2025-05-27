@@ -96,8 +96,8 @@ module.exports = {
       .setTimestamp();
 
     const sourceCodeButton = new ButtonBuilder()
-      .setLabel('Source Code')
-      .setURL('https://github.com/gaurav87565/Lanya-2.0')
+      .setLabel('Subscribe To YT')
+      .setURL('https://www.youtube.com/@AR-DUDE-CREATION')
       .setStyle(ButtonStyle.Link);
 
     const row = new ActionRowBuilder().addComponents(sourceCodeButton);
