@@ -1,17 +1,9 @@
 {
-  "interval": 3000,
-  "statuses": [
-    {
-      "type": "LISTENING",
-      "state": "{userCount} peoples 🎧"
-    },
-    {
-      "type": "PLAYING",
-      "state": "PMC on TOP! ⚡"
-    },
-    {
-      "type": "WATCHING",
-      "state": "PMC Community 🤍"
-    }
-  ]
+  "interval": 30000,
+  "status": {
+    "type": "LISTENING",
+     "state": "{userCount} peoples 🎧",
+     "backup_state": "with {userCount} users",
+     "url": "https://twitch.tv/netrypvp"
+  }
 }
