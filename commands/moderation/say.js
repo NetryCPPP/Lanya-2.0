@@ -1,75 +1,26 @@
-const {
-  SlashCommandBuilder,
-  ModalBuilder,
-  TextInputBuilder,
-  TextInputStyle,
-  ActionRowBuilder,
-  ChannelType,
-} = require('discord.js');
+import discord
+from discord.ext import commands
 
-module.exports = {
-  data: new SlashCommandBuilder()
-    .setName('say')
-    .setDescription('Open a prompt to make the bot say something')
-    .addChannelOption(option =>
-      option
-        .setName('channel')
-        .setDescription('Optional channel where the message will be sent')
-        .addChannelTypes(ChannelType.GuildText)
-        .setRequired(false)
-    ),
+class SayCommand(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
-  // Called when the /say command is used
-  async execute(interaction) {
-    const targetChannel = interaction.options.getChannel('channel');
+    @commands.command(name="say")
+    async def say(self, ctx, *, message: str = None):
+        """
+        Make the bot repeat your message (supports emojis 😎).
+        """
+        if not message:
+            return await ctx.send("⚠️ Please provide a message to say!")
 
-    const modal = new ModalBuilder()
-      .setCustomId(`say-modal|${targetChannel ? targetChannel.id : 'same'}`)
-      .setTitle('Say Something');
+        # Delete the user's command message to keep chat clean
+        try:
+            await ctx.message.delete()
+        except discord.Forbidden:
+            pass  # Ignore if bot doesn't have delete permissions
 
-    const messageInput = new TextInputBuilder()
-      .setCustomId('say-message')
-      .setLabel('What should the bot say?')
-      .setStyle(TextInputStyle.Paragraph)
-      .setPlaceholder('Type your message here...')
-      .setRequired(true);
+        # Send the same message — emojis & formatting included
+        await ctx.send(message)
 
-    const actionRow = new ActionRowBuilder().addComponents(messageInput);
-    modal.addComponents(actionRow);
-
-    // Show the modal (this also counts as responding to the interaction)
-    await interaction.showModal(modal);
-  },
-
-  // Called when the modal is submitted
-  async handleModal(interaction) {
-    const messageContent = interaction.fields.getTextInputValue('say-message');
-    const [, channelId] = interaction.customId.split('|');
-
-    const channelToSend =
-      channelId === 'same'
-        ? interaction.channel
-        : interaction.guild.channels.cache.get(channelId);
-
-    if (!channelToSend || !channelToSend.isTextBased()) {
-      return interaction.reply({
-        content: '❌ The selected channel is invalid or not text-based.',
-        ephemeral: true,
-      });
-    }
-
-    try {
-      await channelToSend.send({ content: messageContent });
-      await interaction.reply({
-        content: `✅ Message sent to ${channelToSend.toString()}`,
-        ephemeral: true,
-      });
-    } catch (err) {
-      console.error('Failed to send message:', err);
-      await interaction.reply({
-        content: '❌ Failed to send the message.',
-        ephemeral: true,
-      });
-    }
-  },
-};
+async def setup(bot):
+    await bot.add_cog(SayCommand(bot))
