@@ -22,5 +22,6 @@ class SayCommand(commands.Cog):
         # Send the same message — emojis & formatting included
         await ctx.send(message)
 
-async def setup(bot):
-    await bot.add_cog(SayCommand(bot))
+def setup(bot):
+    bot.add_cog(SayCommand(bot))
+
